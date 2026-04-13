@@ -9,3 +9,4 @@ backend/data/*
 coverage/
 __pycache__/
 *.pyc
+nohup.out
