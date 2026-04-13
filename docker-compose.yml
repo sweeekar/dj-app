@@ -1,0 +1,31 @@
+services:
+  audio-service:
+    build: ./audio-service
+    ports:
+      - '8000:8000'
+    volumes:
+      - uploads:/uploads
+
+  backend:
+    build: ./backend
+    environment:
+      - PORT=4000
+      - AUDIO_SERVICE_URL=http://audio-service:8000
+    ports:
+      - '4000:4000'
+    volumes:
+      - uploads:/app/uploads
+      - sqlite_data:/app/data
+    depends_on:
+      - audio-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:80'
+    depends_on:
+      - backend
+
+volumes:
+  uploads:
+  sqlite_data:
