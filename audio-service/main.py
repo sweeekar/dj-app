@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+import logging
 import librosa
 import numpy as np
 
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
 
 
 @app.get('/health')
@@ -42,8 +44,9 @@ def analyze():
             'loopCandidates': loop_candidates,
             'spectralCentroid': spectral_centroid
         })
-    except Exception as exc:
-        return jsonify({'error': str(exc)}), 400
+    except Exception:
+        logger.exception('Audio analysis failed')
+        return jsonify({'error': 'Unable to analyze audio file'}), 400
 
 
 if __name__ == '__main__':
